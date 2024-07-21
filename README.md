@@ -57,3 +57,7 @@ python3 haruko.py -c "abc123" -min 4 -max 6 -o wordlist.txt -p "pre_" -s "_suf" 
 ## Warning
 
 HARUKO: THIS TOOL IS INTENDED FOR LEGAL AND ETHICAL USE ONLY. ANY ATTEMPT TO USE IT FOR UNAUTHORIZED ACCESS OR ILLEGAL ACTIVITIES IS PROHIBITED AND WILL BE PURSUED LEGALLY. USE RESPONSIBLY.
+
+## License
+
+This project is licensed under the MIT License
