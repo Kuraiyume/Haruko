@@ -33,7 +33,6 @@ HARUKO is a robust tool designed to generate customizable password wordlists for
    ```
 
 ## Options
-```bash
     -c, --characters : Set of characters to include in the wordlist (e.g., abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789).
     -min, --min_length : Minimum length of the words (default: 4).
     -max, --max_length : Maximum length of the words (default: 6).
@@ -48,4 +47,3 @@ HARUKO is a robust tool designed to generate customizable password wordlists for
     -enc, --encoding : Encoding for the output file (default: utf-8).
     -cfg, --config_file : Path to a JSON configuration file for loading options.
     -r, --regex : Regular expression pattern to filter generated words (e.g., ^[a-zA-Z0-9]{8}$).
-```
