@@ -1,7 +1,3 @@
-tool = """HARUKO: THIS TOOL IS INTENDED FOR LEGAL AND ETHICAL USE ONLY. ANY ATTEMPT TO USE IT FOR UNAUTHORIZED ACCESS OR ILLEGAL ACTIVITIES IS PROHIBITED AND WILL BE PURSUED LEGALLY. USE RESPONSIBLY.
-Veilwr4ith 2024
-"""
-
 import itertools
 import os
 import sys
@@ -11,6 +7,10 @@ import re
 from multiprocessing import Pool, cpu_count
 from typing import List
 from datetime import datetime
+
+tool = """HARUKO: THIS TOOL IS INTENDED FOR LEGAL AND ETHICAL USE ONLY. ANY ATTEMPT TO USE IT FOR UNAUTHORIZED ACCESS OR ILLEGAL ACTIVITIES IS PROHIBITED AND WILL BE PURSUED LEGALLY. USE RESPONSIBLY.
+Veilwr4ith 2024
+"""
 
 class Haruko:
     def __init__(self, characters: str, min_length: int, max_length: int, output_file: str, prefix: str = '', suffix: str = '', exclusions: str = '', include_lengths: List[int] = None, exclude_lengths: List[int] = None, threads: int = cpu_count(), compress: bool = False, encoding: str = 'utf-8', patterns: str = ''):
@@ -26,19 +26,18 @@ class Haruko:
         self.threads = threads
         self.compress = compress
         self.encoding = encoding
-        self.patterns = patterns
+        self.compiled_pattern = re.compile(patterns) if patterns else None
 
     def generate_combinations(self, params):
         characters, length = params
-        return [''.join(combination) for combination in itertools.product(characters, repeat=length)]
+        return (''.join(combination) for combination in itertools.product(characters, repeat=length))
 
-    def process_length(self, length, all_lengths):
-        if length in all_lengths:
+    def process_length(self, length):
+        if length in self.include_lengths and length not in self.exclude_lengths:
             combinations = self.generate_combinations((self.characters, length))
             words = [f"{self.prefix}{word}{self.suffix}" for word in combinations]
-            if self.patterns:
-                pattern = re.compile(self.patterns)
-                words = [word for word in words if pattern.match(word)]
+            if self.compiled_pattern:
+                words = [word for word in words if self.compiled_pattern.match(word)]
             return words
         return []
 
@@ -59,11 +58,17 @@ class Haruko:
             raise ValueError("No valid lengths to include.")
         print(tool)
         print("[*] Generating wordlist....")
+        if self.compiled_pattern:
+            print(f"Applying pattern: {self.compiled_pattern.pattern}")
         wordlist = []
-        with Pool(self.threads) as pool:
-            results = [pool.apply_async(self.process_length, (length, all_lengths)) for length in all_lengths]
-            for result in results:
-                wordlist.extend(result.get())
+        try:
+            with Pool(self.threads) as pool:
+                results = [pool.apply_async(self.process_length, (length,)) for length in all_lengths]
+                for result in results:
+                    wordlist.extend(result.get())
+        except KeyboardInterrupt:
+            print("[*] Generation interrupted. Exiting...")
+            sys.exit(0)
         result_message, word_count = self.write_wordlist(wordlist)
         return result_message, word_count
 
@@ -89,7 +94,7 @@ def main():
     parser.add_argument("-o", "--output-file", type=str, default="haruko_wordlist.txt", help="Output file name.")
     parser.add_argument("-p", "--prefix", type=str, default="", help="Prefix for each word.")
     parser.add_argument("-s", "--suffix", type=str, default="", help="Suffix for each word.")
-    parser.add_argument("-e", "--exclusions", type=str, default="", help="Characters to exclude from th wordlist.")
+    parser.add_argument("-e", "--exclusions", type=str, default="", help="Characters to exclude from the wordlist.")
     parser.add_argument("-inc", "--include_lengths", type=int, nargs="*", default=[], help="Lengths to include in the wordlist.")
     parser.add_argument("-exc", "--exclude_lengths", type=int, nargs="*", default=[], help="Lengths to exclude from the wordlist.")
     parser.add_argument("-t", "--threads", type=int, default=cpu_count(), help="Number of threads to use.")
@@ -116,10 +121,9 @@ def main():
             sys.exit(1)
 
     args.output_file = FileUtils.add_timestamp(args.output_file)
-    wordlist_generator = Haruko(args.characters, args.min_length, args.max_length, args.output_file, args.prefix, args.suffix,args.exclusions, args.include_lengths, args.exclude_lengths, args.threads, args.compress, args.encoding, args.regex)
+    wordlist_generator = Haruko(args.characters, args.min_length, args.max_length, args.output_file, args.prefix, args.suffix, args.exclusions, args.include_lengths, args.exclude_lengths, args.threads, args.compress, args.encoding, args.regex)
     result_message, word_count = wordlist_generator.generate_wordlist()
     print(f"[+] {result_message}")
 
 if __name__ == "__main__":
     main()
-
