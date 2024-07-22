@@ -111,6 +111,10 @@ def main():
     parser.add_argument("-r", "--regex", type=str, default="", help="Regex pattern to filter generated words.")
     args = parser.parse_args()
 
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+
     if args.config_file:
         config = ConfigLoader.load_config(args.config_file)
         for key, value in config.items():
