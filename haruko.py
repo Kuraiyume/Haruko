@@ -26,7 +26,10 @@ class Haruko:
         self.threads = threads
         self.compress = compress
         self.encoding = encoding
-        self.compiled_pattern = re.compile(patterns) if patterns else None
+        try:
+            self.compiled_pattern = re.compile(patterns) if patterns else None
+        except re.error:
+            raise ValueError(f"Invalid regex pattern: {patterns}")
 
     def generate_combinations(self, params):
         characters, length = params
@@ -42,15 +45,19 @@ class Haruko:
         return []
 
     def write_wordlist(self, wordlist):
-        if self.compress:
-            compressed_file = self.output_file + '.gz'
-            with gzip.open(compressed_file, 'wt', encoding=self.encoding) as f:
-                f.write('\n'.join(wordlist))
-            return f"Compressed wordlist generated to {compressed_file}", len(wordlist) - 1
-        else:
-            with open(self.output_file, 'w', encoding=self.encoding) as f:
-                f.write('\n'.join(wordlist))
-            return f"Generated {len(wordlist) - 1} words to {self.output_file}", len(wordlist) - 1
+        try:
+            if self.compress:
+                compressed_file = self.output_file + '.gz'
+                with gzip.open(compressed_file, 'wt', encoding=self.encoding) as f:
+                    f.write('\n'.join(wordlist))
+                return f"Compressed wordlist generated to {compressed_file}", len(wordlist) - 1
+            else:
+                with open(self.output_file, 'w', encoding=self.encoding) as f:
+                    f.write('\n'.join(wordlist))
+                return f"Generated {len(wordlist) - 1} words to {self.output_file}", len(wordlist) - 1
+        except IOError as e:
+            print(f"[!] Error writing file: {e}")
+            sys.exit(1)
 
     def generate_wordlist(self):
         all_lengths = self.include_lengths - self.exclude_lengths
@@ -104,10 +111,6 @@ def main():
     parser.add_argument("-r", "--regex", type=str, default="", help="Regex pattern to filter generated words.")
     args = parser.parse_args()
 
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
-    
     if args.config_file:
         config = ConfigLoader.load_config(args.config_file)
         for key, value in config.items():
