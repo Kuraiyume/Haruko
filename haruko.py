@@ -8,8 +8,14 @@ from multiprocessing import Pool, cpu_count
 from typing import List
 from datetime import datetime
 
-tool = """HARUKO: THIS TOOL IS INTENDED FOR LEGAL AND ETHICAL USE ONLY. ANY ATTEMPT TO USE IT FOR UNAUTHORIZED ACCESS OR ILLEGAL ACTIVITIES IS PROHIBITED AND WILL BE PURSUED LEGALLY. USE RESPONSIBLY.
-Veilwr4ith 2024
+tool = r"""
+  _    _                  _         
+ | |  | |                | |        
+ | |__| | __ _ _ __ _   _| | _____  
+ |  __  |/ _` | '__| | | | |/ / _ \ 
+ | |  | | (_| | |  | |_| |   < (_) |
+ |_|  |_|\__,_|_|   \__,_|_|\_\___/ 
+                    Veilwr4ith
 """
 
 class Haruko:
@@ -63,7 +69,6 @@ class Haruko:
         all_lengths = self.include_lengths - self.exclude_lengths
         if not all_lengths:
             raise ValueError("No valid lengths to include.")
-        print(tool)
         print("[*] Generating wordlist....")
         if self.compiled_pattern:
             print(f"Applying pattern: {self.compiled_pattern.pattern}")
@@ -94,6 +99,7 @@ class FileUtils:
 
 def main():
     import argparse
+    print(tool)
     parser = argparse.ArgumentParser(description="Haruko: A Password Wordlist Generator for Brute-Force Attacks.")
     parser.add_argument("-c", "--characters", type=str, help="Set of characters to include in the wordlist.")
     parser.add_argument("-min", "--min_length", type=int, default=4, help="Minimum length of words.")
