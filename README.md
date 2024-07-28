@@ -14,7 +14,7 @@ HARUKO is a robust tool designed to generate customizable password wordlists for
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/haruko
+   git clone https://github.com/veilwr4ith/haruko
    ```
    
 2. **Install gzip:**
