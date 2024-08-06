@@ -57,3 +57,11 @@ HARUKO is a robust tool designed to generate customizable password wordlists for
 | `-yf, --year_format` | Year format: 'YY', 'YYYY', 'MMYY'.                                                                 | `YYYY`                                      |
 | `-yd, --year_delimiters`| Delimiters to use between words and years, separated by spaces (e.g., '-', '_', '').               | `- _`                                       |
 | `--no-timestamp`     | Exclude timestamp from the output file name.                                                       | (no timestamp in file name)                |
+
+## [+] Basic Usage
+
+   ```bash
+   python3 haruko.py -c "abc123" -min 1 -max 6 -o wordlist.txt
+   ```
+
+
