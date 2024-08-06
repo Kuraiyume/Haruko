@@ -65,6 +65,10 @@ HARUKO is a robust tool designed to generate customizable password wordlists for
    ```
 *This command generates a wordlist with combinations of abc123, with lengths between 1 and 6 characters, with an output file name of wordlist.txt*
 
+## [+] License
+
+- This project is licensed under MIT License
+
 
 
 
