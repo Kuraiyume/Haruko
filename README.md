@@ -61,7 +61,10 @@ HARUKO is a robust tool designed to generate customizable password wordlists for
 ## [+] Basic Usage
 
    ```bash
-   python3 haruko.py -c "abc123" -min 1 -max 6 -o wordlist.txt
+   python3 haruko.py -c abc123 -min 1 -max 6 -o wordlist.txt
    ```
+*This command generates a wordlist with combinations of abc123, with lengths between 1 and 6 characters, with an output file name of wordlist.txt*
+
+
 
 
